@@ -1,9 +1,27 @@
+# --- Environment ---
+.venv/
+env/
+*.env
+
+# --- Python cache ---
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.env
-*.log
-*.db
-*.sqlite
+
+# --- Models (do not upload trained models) ---
+models/*.joblib
+models/*.pkl
+models/*.sav
+
+# --- Results and logs (local only) ---
+results/
+logs/
+
+# --- System files ---
 .DS_Store
+Thumbs.db
+
+# --- Jupyter / VSCode ---
+.ipynb_checkpoints/
+.vscode/
