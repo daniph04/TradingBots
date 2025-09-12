@@ -1,0 +1,12 @@
+ccxt
+pandas
+numpy
+pandas-ta
+scikit-learn
+xgboost
+joblib
+python-telegram-bot
+flask
+streamlit
+schedule
+requests
