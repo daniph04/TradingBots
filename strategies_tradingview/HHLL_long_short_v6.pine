@@ -1,0 +1,61 @@
+//@version=6
+strategy("HHLL Strategy (Long & Short) + Alerts", overlay=true, default_qty_type=strategy.percent_of_equity, default_qty_value=10)
+
+// === PARAMETERS ===
+length   = input.int(31, "HH/LL lookback", minval=5)
+tpLong   = input.float(1.01, "TP Long (multiplier)")
+slLong   = input.float(0.99, "SL Long (multiplier)")
+tpShort  = input.float(0.993, "TP Short (multiplier)")
+slShort  = input.float(1.007, "SL Short (multiplier)")
+
+// === VOLUME FILTER ===
+volOk = volume > ta.sma(volume, length)
+
+// === HH / LL ===
+ll        = ta.lowest(low, length)
+llPrev    = ll[1]
+hh        = ta.highest(high, length)
+hhPrev    = hh[1]
+
+// === CONDITIONS ===
+longEntry     = (low < llPrev) and (close > open) and (close > close[1]) and (close > open[1]) and volOk
+longEarlyExit = (high == hh) and (close < open[1])
+
+shortEntry     = (high > hhPrev) and (close < open) and (close < open[1]) and (high > high[1]) and volOk
+shortEarlyExit = (close > open) and (low < ta.lowest(low, length)[1])
+
+// === EXECUTION ===
+if (longEntry)
+    strategy.entry("Long", strategy.long, comment="HHLL Long")
+    alert('{"action":"open","side":"long","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar)
+
+if (strategy.position_size > 0)
+    // Optional TP/SL (comment out if you only want early-exit logic)
+    strategy.exit("Long TP/SL", from_entry="Long",
+        limit = strategy.position_avg_price * tpLong,
+        stop  = strategy.position_avg_price * slLong)
+    if (longEarlyExit)
+        strategy.close("Long", comment="Long Early Exit")
+        alert('{"action":"close","side":"long","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar)
+
+if (shortEntry)
+    strategy.entry("Short", strategy.short, comment="HHLL Short")
+    alert('{"action":"open","side":"short","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar)
+
+if (strategy.position_size < 0)
+    strategy.exit("Short TP/SL", from_entry="Short",
+        limit = strategy.position_avg_price * tpShort,
+        stop  = strategy.position_avg_price * slShort)
+    if (shortEarlyExit)
+        strategy.close("Short", comment="Short Early Exit")
+        alert('{"action":"close","side":"short","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar)
+
+// === ALERTCONDITIONS (for webhook setups) ===
+alertcondition(longEntry, title="LONG_ENTRY",
+     message='{"action":"open","side":"long","symbol":"' + syminfo.ticker + '"}')
+alertcondition(longEarlyExit and strategy.position_size > 0, title="LONG_EARLY_EXIT",
+     message='{"action":"close","side":"long","symbol":"' + syminfo.ticker + '"}')
+alertcondition(shortEntry, title="SHORT_ENTRY",
+     message='{"action":"open","side":"short","symbol":"' + syminfo.ticker + '"}')
+alertcondition(shortEarlyExit and strategy.position_size < 0, title="SHORT_EARLY_EXIT",
+     message='{"action":"close","side":"short","symbol":"' + syminfo.ticker + '"}')
