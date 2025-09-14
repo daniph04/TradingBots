@@ -99,13 +99,3 @@ This project is licensed under the MIT License.
 
 ---
 
-👉 This README explains:
-- The folder structure  
-- Installation + environment setup  
-- How to run each bot  
-- Where ML fits in  
-- TradingView strategies  
-- Streamlit dashboard  
-- Clear disclaimer  
-
-Do you want me to also prepare a **shorter version** (2-3 paragraphs) in case you need something simpler for internships / recruiters?
