@@ -41,7 +41,7 @@ Clone this repository and install the required dependencies:
 ```bash
 git clone https://github.com/daniph04/TradingBots.git
 cd TradingBots
-pip install -r requirements.txt
+pip install -r requirements.txt```
 
 
 - Environment Setup
