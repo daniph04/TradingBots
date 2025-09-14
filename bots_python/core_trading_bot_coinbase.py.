@@ -1,0 +1,50 @@
+"""
+Name: core_trading_bot_coinbase.py
+Purpose: Simple trading bot for Coinbase (BTC/USD).
+Inputs: Uses environment variables for API keys and configuration.
+Outputs: Places market buy orders with fixed USD amount, logs trades.
+Notes: Logic preserved exactly as in the original script (only secrets moved to .env).
+"""
+
+import os
+import ccxt
+from datetime import datetime
+
+# ========= Secure config from environment =========
+API_KEY    = os.getenv("API_KEY")        # Coinbase API key
+API_SECRET = os.getenv("API_SECRET")     # Coinbase API secret
+API_PASS   = os.getenv("API_PASSPHRASE") # Coinbase passphrase (if required)
+
+# Trading parameters
+SYMBOL   = os.getenv("SYMBOL", "BTC/USD")
+USD_SIZE = float(os.getenv("USD_SIZE", "100"))  # Fixed USD amount per trade
+
+# ========= Exchange client =========
+exchange = ccxt.coinbase({
+    'apiKey': API_KEY,
+    'secret': API_SECRET,
+    'password': API_PASS,
+    'enableRateLimit': True
+})
+
+def log_message(msg: str):
+    """Log local message with timestamp."""
+    print(f"[{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}] {msg}")
+
+def run_trade():
+    """Place a simple market buy order for BTC with fixed USD amount."""
+    try:
+        balance = exchange.fetch_balance()
+        usd_balance = balance['total'].get('USD', 0)
+        if usd_balance < USD_SIZE:
+            log_message(f"❌ Not enough USD to buy {SYMBOL}. Needed: {USD_SIZE} | Available: {usd_balance}")
+            return
+
+        log_message(f"Placing BUY order: {SYMBOL} for ${USD_SIZE}")
+        order = exchange.create_market_buy_order(SYMBOL, USD_SIZE)
+        log_message(f"✅ Order executed: {order}")
+    except Exception as e:
+        log_message(f"❌ Error executing trade: {e}")
+
+if __name__ == "__main__":
+    run_trade()
