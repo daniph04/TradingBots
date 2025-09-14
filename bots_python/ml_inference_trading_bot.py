@@ -1,5 +1,5 @@
 """
-Name: ml_inference_trading_bot_kraken.py
+Name: ml_inference_trading_bot.py
 Purpose: Machine Learning *inference* trading bot for Kraken using ccxt.
 What it does:
   - Loads a PRE-TRAINED ML model (.joblib) from /models (this script does NOT train).
