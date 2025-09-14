@@ -1,68 +1,111 @@
-# Trading Bots Framework
+# TradingBots
 
-A collection of automated trading bots built with **Python**, including:
-- Rule-based bots (SMA/RSI with TP/SL)
-- Machine learning bots (joblib models)
-- A webhook listener for TradingView alerts
-- A trade copier for logging and summaries
-- A backtester for performance evaluation
-- A Streamlit dashboard for live monitoring
-
-Exchanges are managed using **ccxt** (Bybit, Coinbase, etc).
+A collection of algorithmic trading bots built in **Python** and **TradingView (Pine Script)**.  
+Includes multiple strategies, pre-trained models, backtesting utilities, and a Streamlit dashboard.
 
 ---
 
-##  Architecture
-
-TradingView Alerts  →  Webhook Listener (Flask)
-↓
-Core Bot / ML Bot (Python + ccxt)
-↓
-Exchange
-↓
-Trade Copier → Dashboard → Backtester
+## 📂 Project Structure
+TradingBots/
+│
+├── bots_python/              # Python trading bots
+│   ├── core_trading_bot.py   # Basic trading bot with SMA/RSI logic
+│   ├── signal_copier.py      # Copies signals from Telegram and executes trades
+│   ├── tradingview_webhook_listener.py # Listens to TradingView alerts via webhook
+│   ├── multi_asset_model_bot.py        # Prototype with pre-trained models for BTC, ETH, SOL
+│   ├── ml_inference_trading_bot.py     # Loads ML models for prediction-based signals
+│   ├── legacy_multi_asset_bot.py       # Older version kept for reference
+│   └── .env.example          # Example environment variables (API keys, settings)
+│
+├── models/                   # Store ML models (ignored by Git)
+│
+├── results/                  # Store backtest results and logs (ignored by Git)
+│
+├── strategies_tradingview/   # Pine Script strategies for TradingView
+│
+├── requirements.txt          # Python dependencies
+├── .gitignore                # Ignore secrets, models, and logs
+├── LICENSE                   # MIT License
+└── README.md                 # Project documentation
 
 ---
 
-## Setup 
+## ⚙️ Installation
 
-1. Clone the repo:
-   ```bash
-   git clone <your-repo-url>
-   cd TradingBots
-2. Create a virtual environment:
-   python -m venv .venv
-source .venv/bin/activate   # Mac/Linux
-.venv\Scripts\activate      # Windows
+Clone this repository and install the required dependencies:
 
-3.	Install dependencies:
-    - pip install -r requirements.txt
+```bash
+git clone https://github.com/daniph04/TradingBots.git
+cd TradingBots
+pip install -r requirements.txt
 
-4.	Copy .env.example to .env and fill in:
-	•	Exchange API key and secret
-	•	Telegram bot token and chat ID
-	•	Trading settings (symbol, timeframe, DRY_RUN flag)
+- Environment Setup
+	1.	Copy the example file:
+cp bots_python/.env.example .env
 
+	2.	Open .env and add your exchange API keys and settings:
+	•	Exchange (Bybit, Binance, etc.)
+	•	API key and secret
+	•	Trading symbols
+	•	Risk management settings
+	•	Optional: Telegram bot token for notifications
 
-Bots
-	•	tradingview_webhook_listener.py → Flask server that receives TradingView alerts and executes orders.
-	•	core_trading_bot.py → Strategy bot using SMA + RSI with TP/SL logic.
-	•	ml_signal_bot.py → Loads trained ML models (.joblib) to generate signals.
-	•	trade_copier.py → Copies executed trades into CSV files and produces summaries.
-	•	dashboard.py → Streamlit dashboard for monitoring balances, trades, and signals.
-	•	backtester.py → Runs historical backtests and calculates metrics.
+⚠️ Never commit your real .env file — it is already ignored in .gitignore.
 
- Machine Learning
+Running the Bots
 
-Training script (training/train_model.py) allows you to:
-	•	Download OHLCV data
-	•	Build features (returns, SMA, RSI, volume)
-	•	Train models with time-series cross-validation
-	•	Export models to models/*.joblib
+Each bot can be run independently. Examples:
+# Core trading bot (SMA + RSI strategy)
+python bots_python/core_trading_bot.py
 
+# TradingView webhook listener (executes trades from alerts)
+python bots_python/tradingview_webhook_listener.py
 
-⚠️ Disclaimer
-	•	This project is for educational purposes only.
-	•	Always use DRY_RUN=True or exchange testnet before live trading.
-	•	Crypto trading is risky — use at your own responsibility
+# Telegram signal copier (executes trades from Telegram signals)
+python bots_python/signal_copier.py
 
+# Multi-asset model bot (BTC, ETH, SOL with pre-trained models)
+python bots_python/multi_asset_model_bot.py
+
+----
+
+TradingView Strategies
+
+Inside strategies_tradingview/, you’ll find Pine Script strategies such as:
+	•	HHLL Long/Short Strategy
+	•	NASDAQ RSI/STOCH Strategy
+
+These scripts can be pasted into TradingView Pine Editor, backtested, and connected to the Python bots via webhook alerts.
+
+Dashboard (Optional)
+
+A Streamlit dashboard (dashboard.py) can be used to visualize:
+	•	Active trades
+	•	Balance and PnL
+	•	Strategy performance
+
+Machine Learning
+
+Some bots (e.g., ml_inference_trading_bot.py, multi_asset_model_bot.py) can load pre-trained ML models from /models/.
+Models are ignored in Git and should be trained/stored locally.
+
+Disclaimer
+
+This project is for educational purposes only.
+Use at your own risk. Trading cryptocurrencies involves high risk, and you are responsible for your own results.
+
+License:
+This project is licensed under the MIT License.
+
+---
+
+👉 This README explains:
+- The folder structure  
+- Installation + environment setup  
+- How to run each bot  
+- Where ML fits in  
+- TradingView strategies  
+- Streamlit dashboard  
+- Clear disclaimer  
+
+Do you want me to also prepare a **shorter version** (2-3 paragraphs) in case you need something simpler for internships / recruiters?
