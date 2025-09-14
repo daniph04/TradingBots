@@ -1,5 +1,5 @@
 """
-Name: core_trading_bot_coinbase.py
+Name: core_trading_bot.py
 Purpose: Simple trading bot for Coinbase (BTC/USD).
 Inputs: Uses environment variables for API keys and configuration.
 Outputs: Places market buy orders with fixed USD amount, logs trades.
