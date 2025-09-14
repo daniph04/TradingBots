@@ -43,6 +43,7 @@ git clone https://github.com/daniph04/TradingBots.git
 cd TradingBots
 pip install -r requirements.txt
 
+
 - Environment Setup
 	1.	Copy the example file:
 cp bots_python/.env.example .env
