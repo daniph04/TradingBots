@@ -6,29 +6,33 @@ Includes multiple strategies, pre-trained models, backtesting utilities, and a S
 ---
 
 ## 📂 Project Structure
-TradingBots/
-│
-├── bots_python/              # Python trading bots
-│   ├── core_trading_bot.py   # Basic trading bot with SMA/RSI logic
-│   ├── signal_copier.py      # Copies signals from Telegram and executes trades
-│   ├── tradingview_webhook_listener.py # Listens to TradingView alerts via webhook
-│   ├── multi_asset_model_bot.py        # Prototype with pre-trained models for BTC, ETH, SOL
-│   ├── ml_inference_trading_bot.py     # Loads ML models for prediction-based signals
-│   ├── legacy_multi_asset_bot.py       # Older version kept for reference
-│   └── .env.example          # Example environment variables (API keys, settings)
-│
-├── models/                   # Store ML models (ignored by Git)
-│
-├── results/                  # Store backtest results and logs (ignored by Git)
-│
-├── strategies_tradingview/   # Pine Script strategies for TradingView
-│
-├── requirements.txt          # Python dependencies
-├── .gitignore                # Ignore secrets, models, and logs
-├── LICENSE                   # MIT License
-└── README.md                 # Project documentation
 
----
+### bots_python/
+- **core_trading_bot.py** – Basic bot that trades using SMA/RSI conditions. A simple baseline I use for testing.  
+- **ml_inference_trading_bot.py** – Loads pre-trained ML models to generate buy/sell signals. No training inside the bot.  
+- **multi_asset_model_bot.py** – Extended ML bot that supports BTC, ETH, and SOL models, trading them in parallel.  
+- **signal_copier.py** – Listens to external signals (e.g., Telegram) and mirrors them into real exchange trades.  
+- **tradingview_webhook_listener.py** – Flask server that listens to TradingView alerts and executes orders automatically.  
+- **legacy_multi_asset_bot.py** – Early prototype of multi-asset logic. I keep it for reference.  
+- **dashboard.py** – Streamlit dashboard for visualizing trades, balances, and performance.  
+
+### strategies_tradingview/  
+Custom Pine Script strategies (long/short logic, alerts) that send signals to the Python bots.  
+
+### models/  
+Pre-trained ML models used by `ml_inference_trading_bot.py` and `multi_asset_model_bot.py`. (Ignored by Git).  
+
+### results/  
+Backtest results, logs, and evaluation files. (Ignored by Git).  
+
+### Config files  
+- **.env.example** – Template for environment variables (API keys, settings).  
+- **requirements.txt** – Python dependencies.  
+- **.gitignore** – Ignore secrets, models, and logs.  
+- **README.md** – Project documentation.  
+- **LICENSE** – MIT License.
+
+----
 
 ## ⚙️ Installation
 
@@ -66,6 +70,10 @@ python bots_python/signal_copier.py
 
 # Multi-asset model bot (BTC, ETH, SOL with pre-trained models)
 python bots_python/multi_asset_model_bot.py
+
+----
+
+📘 Detailed explanations of each bot are available in [Bots Overview](bots_overview.md).
 
 ----
 
